@@ -86,7 +86,7 @@
         - nodeB
 
     - debug:
-      msg: "Public IP Address master: {{ pip_output.results[0].state.ip_address }}"
+        msg: "Public IP Address master: {{ pip_output.results[0].state.ip_address }}"
 
     - debug:
         msg: "Public IP Address nodeA: {{ pip_output.results[1].state.ip_address }}"
