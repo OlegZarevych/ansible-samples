@@ -5,6 +5,8 @@
 - name: Create Azure VMs
   hosts: localhost
   connection: local
+  roles:
+    - { role: azure.azure_preview_modules }
   vars:
     resource_group: aks-lab
     location: eastus
