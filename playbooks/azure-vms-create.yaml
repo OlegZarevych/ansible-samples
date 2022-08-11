@@ -6,7 +6,7 @@
   hosts: localhost
   connection: local
   roles:
-    - { role: azure.azure_preview_modules }
+    - { role: azure.azcollection }
   vars:
     resource_group: aks-lab
     location: eastus
