@@ -1,0 +1,95 @@
+# Description
+# ========
+# Ansible playbook to create RG and VM's
+
+- name: Create Azure VMs
+  hosts: localhost
+  connection: local
+  vars:
+    resource_group: aks-lab
+    location: eastus
+    vm_name: lab
+    admin_username: ozar
+    admin_password: # Put before start
+
+  tasks:
+    - name: Create a resource group
+      azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        location: "{{ location }}"
+    
+    - name: Create virtual network
+      azure_rm_virtualnetwork:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}"
+        address_prefixes: "10.0.0.0/16"
+
+    - name: Create subnets for VM's
+      azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        virtual_network: "{{ vm_name }}"
+        name: "{{ vm_name }}"
+        address_prefix: "10.0.1.0/24"
+
+    - name: Create Network Security Group that allows HTTP
+      azure_rm_securitygroup:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}"
+        rules:
+          - name: HTTP
+            protocol: Tcp
+            destination_port_range: 80
+            access: Allow
+            priority: 1002
+            direction: Inbound
+
+    - name: Create public IP addresses for VM's
+      azure_rm_publicipaddress:
+        resource_group: "{{ resource_group }}"
+        allocation_method: Static
+        name: "{{ vm_name }}_{{ item }}"
+      loop:
+        - master
+        - nodeA
+        - nodeB
+      register: pip_output
+
+    - name: Create virtual network inteface cards for VM A and B
+      azure_rm_networkinterface:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}_{{ item }}"
+        virtual_network: "{{ vm_name }}"
+        subnet: "{{ vm_name }}"
+        public_ip_name: "{{ vm_name }}_{{ item }}"
+        security_group: "{{ vm_name }}"
+      loop:
+        - master
+        - nodeA
+        - nodeB
+
+    - name: Create VM A and B
+      azure_rm_virtualmachine:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}{{ item }}"
+        admin_username: "{{ admin_username }}"
+        admin_password: "{{ admin_password }}"
+        vm_size: Standard_B1ms
+        network_interfaces: "{{ vm_name }}_{{ item }}"
+        image:
+          offer: UbuntuServer
+          publisher: Canonical
+          sku: 20.04-LTS
+          version: latest
+      loop:
+        - master
+        - nodeA
+        - nodeB
+
+    - debug:
+      msg: "Public IP Address master: {{ pip_output.results[0].state.ip_address }}"
+
+    - debug:
+        msg: "Public IP Address nodeA: {{ pip_output.results[1].state.ip_address }}"
+    
+    - debug:
+        msg: "Public IP Address nodeB: {{ pip_output.results[1].state.ip_address }}"
