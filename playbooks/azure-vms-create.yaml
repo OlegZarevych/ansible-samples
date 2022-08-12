@@ -6,7 +6,7 @@
   hosts: localhost
   connection: local
   roles:
-    - { role: azure.azcollection }
+    - { role: azure.azcollection.azure_rm_resourcegroup }
   vars:
     resource_group: aks-lab
     location: eastus
