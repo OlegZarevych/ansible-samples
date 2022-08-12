@@ -5,6 +5,8 @@
 - name: Create Azure VMs
   hosts: localhost
   connection: local
+  collections:
+    - azure.azcollection
   vars:
     resource_group: aks-lab
     location: eastus
