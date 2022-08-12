@@ -56,7 +56,7 @@
         - nodeB
       register: pip_output
 
-    - name: Create virtual network inteface cards for VM A and B
+    - name: Create virtual network inteface cards for VM's
       azure_rm_networkinterface:
         resource_group: "{{ resource_group }}"
         name: "{{ vm_name }}_{{ item }}"
@@ -69,7 +69,7 @@
         - nodeA
         - nodeB
 
-    - name: Create VM A and B
+    - name: Create VM's
       azure_rm_virtualmachine:
         resource_group: "{{ resource_group }}"
         name: "{{ vm_name }}{{ item }}"
