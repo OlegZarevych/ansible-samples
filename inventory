@@ -5,6 +5,5 @@ localhost
 [nodes]
 
 [all:vars]
-ansible_connection=ssh # actually default mode smart is OK
-ansible_ssh_user=ozar
-ansible_ssh_pass=
+ansible_user=ozar
+ansible_pass=
