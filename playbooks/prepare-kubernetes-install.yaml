@@ -14,7 +14,7 @@
 # Allows you to change the connection plugin used for tasks to execute on the target.
 
 ---
-- hosts: "masters, nodes"
+- hosts: "master, nodes"
   remote_user: ansible
   become: yes
   become_method: sudo
