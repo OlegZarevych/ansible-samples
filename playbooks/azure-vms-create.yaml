@@ -33,7 +33,7 @@
         name: "{{ vm_name }}"
         address_prefix: "10.0.1.0/24"
 
-    - name: Create Network Security Group that allows HTTP
+    - name: Create Network Security Group that allows HTTP ans SSH
       azure_rm_securitygroup:
         resource_group: "{{ resource_group }}"
         name: "{{ vm_name }}"
