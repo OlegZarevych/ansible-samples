@@ -24,14 +24,14 @@
       azure_rm_virtualnetwork:
         resource_group: "{{ resource_group }}"
         name: "{{ vm_name }}"
-        address_prefixes: "10.0.0.0/16"
+        address_prefixes: "10.4.0.0/16"
 
     - name: Create subnets for VM's
       azure_rm_subnet:
         resource_group: "{{ resource_group }}"
         virtual_network: "{{ vm_name }}"
         name: "{{ vm_name }}"
-        address_prefix: "10.0.1.0/24"
+        address_prefix: "10.4.1.0/24"
 
     - name: Create Network Security Group that allows HTTP ans SSH
       azure_rm_securitygroup:
