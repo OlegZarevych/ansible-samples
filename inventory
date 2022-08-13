@@ -1,0 +1,10 @@
+localhost
+
+[master]
+
+[nodes]
+
+[all:vars]
+ansible_connection=ssh # actually default mode smart is OK
+ansible_user=ozar
+ansible_pass=
